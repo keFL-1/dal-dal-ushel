@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дал Дал Ушёл — кафе в Тимашевске</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Unbounded:wght@400;600;700&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+    
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+
+    <style>
+        :root {
+            --bg-main: #0a0a0a;
+            --bg-card: #121212;
+            --bg-card-hover: #1a1a1a;
+            --accent: #D4AF37; 
+            --accent-hover: #b5952f;
+            --text-main: #FFFFFF;
+            --text-muted: #9CA3AF;
+            --border: #262626;
+            --radius: 16px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            --header-bg: rgba(10, 10, 10, 0.95);
+            --map-filter: invert(90%) hue-rotate(180deg) contrast(1.1);
+            --input-bg: #1a1a1a;
+            --danger: #ef4444;
+        }
+
+        [data-theme="light"] {
+            --bg-main: #F8F9FA;
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F3F4F6;
+            --accent: #B8860B;
+            --accent-hover: #996F09;
+            --text-main: #111827;
+            --text-muted: #4B5563;
+            --border: #E5E7EB;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --header-bg: rgba(248, 249, 250, 0.95);
+            --map-filter: none;
+            --input-bg: #F3F4F6;
+            --danger: #dc2626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1, h2, h3, h4, .nav-link, .btn, .stat-number, .fact-number, .admin-title {
+            font-family: 'Unbounded', sans-serif;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        svg.icon {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            transition: box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .logo-svg {
+            width: 50px;
+            height: 50px;
+            flex-shrink: 0;
+        }
+
+        .nav {
+            display: flex;
+            gap: 28px;
+            margin-left: auto;
+            margin-right: 32px;
+        }
+
+        .nav-link {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+            position: relative;
+            padding: 4px 0;
+            transition: color 0.25s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .theme-toggle svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .sun-icon { display: none; }
+        .moon-icon { display: block; }
+
+        [data-theme="light"] .sun-icon { display: block; }
+        [data-theme="light"] .moon-icon { display: none; }
+
+        .header-phone {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Unbounded', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .header-phone svg {
+            color: var(--accent);
+        }
+
+        /* Hero */
+        .hero {
+            padding: 180px 0 100px;
+            background: var(--bg-main);
+            position: relative;
+            transition: background-color 0.3s ease;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 8px 18px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .hero h1 {
+            font-size: clamp(36px, 4.5vw, 62px);
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+        }
+
+        .hero-description {
+            font-size: 17px;
+            color: var(--text-muted);
+            max-width: 480px;
+            margin-bottom: 36px;
+            line-height: 1.7;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 32px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: 'Unbounded', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+        }
+        
+        [data-theme="light"] .btn-primary {
+            color: #FFF;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            background: var(--bg-card);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+        }
+        
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+            transition: border-color 0.3s ease;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+            display: block;
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .hero-visual {
+            position: relative;
+            height: 440px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        .hero-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            transition: transform 6s ease;
+        }
+
+        .hero-fallback {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-card);
+            z-index: 1;
+        }
+        
+        .hero-fallback svg {
+            width: 120px;
+            height: 120px;
+            opacity: 0.2;
+        }
+
+        .hero-visual:hover img {
+            transform: scale(1.05);
+        }
+
+        .hero-visual::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(10, 10, 10, 0.8), transparent 50%);
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        /* Section base */
+        section {
+            padding: 100px 0;
+            transition: background-color 0.3s ease;
+        }
+
+        .section-label {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(28px, 3.2vw, 44px);
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            max-width: 560px;
+            line-height: 1.7;
+        }
+
+        /* Features */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 56px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 36px 28px;
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .feature-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: var(--accent);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .feature-card h3 {
+            font-size: 17px;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Menu Interactive */
+        .menu-section {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .menu-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 48px;
+            margin-top: 48px;
+        }
+
+        .menu-sidebar {
+            position: sticky;
+            top: 100px;
+            align-self: start;
+        }
+
+        .menu-tab {
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-family: 'Unbounded', sans-serif;
+            font-size: 14px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            margin-bottom: 8px;
+            border: 1px solid transparent;
+        }
+
+        .menu-tab:hover {
+            color: var(--text-main);
+            background: var(--bg-main);
+        }
+
+        .menu-tab.active {
+            background: var(--bg-main);
+            color: var(--accent);
+            border-color: var(--border);
+        }
+
+        .menu-content {
+            min-height: 600px;
+            position: relative;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .menu-grid.fade-out {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .menu-item {
+            background: var(--bg-main);
+            border-radius: var(--radius);
+            padding: 24px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        .menu-item:hover {
+            border-color: var(--accent);
+        }
+
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            gap: 16px;
+        }
+
+        .menu-item-name {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--text-main);
+        }
+
+        .menu-item-price {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+
+        .menu-item-weight {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .menu-item-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .menu-note {
+            margin-top: 40px;
+            font-size: 13px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Map & Facts */
+        .map-section {
+            background: var(--bg-main);
+        }
+
+        .map-wrapper {
+            margin-top: 48px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            height: 400px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            transition: border-color 0.3s ease;
+        }
+
+        .map-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            filter: var(--map-filter);
+            transition: filter 0.3s ease;
+        }
+
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 56px;
+        }
+
+        .fact-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 32px 28px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        .fact-card:hover {
+            border-color: var(--accent);
+        }
+
+        .fact-number {
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+
+        .fact-text {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            padding: 64px 0 32px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 20px;
+            max-width: 320px;
+            line-height: 1.7;
+        }
+
+        .footer h4 {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-main);
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.25s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            transition: border-color 0.3s ease;
+        }
+
+        /* Motion */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        /* --- ADMIN PANEL STYLES --- */
+        .admin-container {
+            display: none;
+            min-height: 100vh;
+            padding-top: 100px;
+            padding-bottom: 60px;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        
+        .admin-title {
+            font-size: 28px;
+        }
+        
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 32px;
+        }
+        
+        .admin-sidebar {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            padding: 20px;
+            height: fit-content;
+        }
+        
+        .admin-sidebar h3 {
+            font-size: 14px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            letter-spacing: 0.05em;
+        }
+        
+        .admin-cat-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 12px 16px;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            text-align: left;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 4px;
+            font-family: 'Montserrat', sans-serif;
+            transition: background 0.2s;
+        }
+        
+        .admin-cat-btn:hover, .admin-cat-btn.active {
+            background: var(--bg-main);
+        }
+        
+        .admin-cat-btn.active {
+            border-left: 3px solid var(--accent);
+        }
+        
+        .admin-main {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            padding: 32px;
+        }
+        
+        .admin-main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .admin-table th {
+            text-align: left;
+            padding: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+            text-transform: uppercase;
+        }
+        
+        .admin-table td {
+            padding: 16px 12px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+        
+        .admin-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .admin-icon-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .admin-icon-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .admin-icon-btn.delete:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        /* Login/Setup Screen */
+        .auth-screen {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--bg-main);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .auth-card {
+            background: var(--bg-card);
+            padding: 48px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .auth-card h2 {
+            margin-bottom: 12px;
+        }
+        
+        .auth-card p {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--accent);
+        }
+        
+        /* Modals */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--bg-card);
+            width: 100%;
+            max-width: 500px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            padding: 32px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 24px;
+        }
+        
+        .modal-close:hover {
+            color: var(--text-main);
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .hero-grid, .menu-container, .admin-layout {
+                grid-template-columns: 1fr;
+            }
+            .hero-visual { height: 300px; }
+            .features-grid, .facts-grid { grid-template-columns: 1fr; }
+            .menu-sidebar {
+                position: static;
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 12px;
+                gap: 8px;
+            }
+            .menu-tab {
+                margin-bottom: 0;
+                white-space: nowrap;
+                width: auto;
+            }
+            .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+            .nav { display: none; }
+            .admin-table th:nth-child(3), .admin-table td:nth-child(3) { display: none; } /* Hide weight on mobile */
+        }
+
+        @media (max-width: 600px) {
+            .hero { padding: 140px 0 60px; }
+            .hero-stats { gap: 24px; }
+            .stat-number { font-size: 22px; }
+            .btn { padding: 14px 24px; font-size: 13px; }
+            section { padding: 64px 0; }
+            .menu-grid { grid-template-columns: 1fr; }
+            .header-controls { gap: 12px; }
+            .header-phone span { display: none; }
+            .admin-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .admin-main { padding: 16px; }
+            .admin-table td, .admin-table th { padding: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- AUTH SCREEN (LOGIN / SETUP) -->
+    <div class="auth-screen" id="authScreen">
+        <div class="auth-card">
+            <h2 id="authTitle">Вход в админ-панель</h2>
+            <p id="authDesc">Введите пароль для доступа</p>
+            <form id="authForm">
+                <div class="form-group">
+                    <label for="adminPassword">Пароль</label>
+                    <input type="password" id="adminPassword" class="form-control" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Войти</button>
+                <p id="authError" style="color: var(--danger); margin-top: 12px; font-size: 13px; display: none;">Неверный пароль</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN SITE -->
+    <div id="main-site">
+        <!-- HEADER -->
+        <header id="header">
+            <div class="container header-inner">
+                <a href="#" class="logo">
+                    <svg class="logo-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="100" cy="100" r="98" fill="#000000"/>
+                        <circle cx="100" cy="100" r="88" fill="none" stroke="#FFFFFF" stroke-width="3"/>
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="#FFFFFF" stroke-width="1.5"/>
+                        <g fill="#D4AF37">
+                            <path d="M64 67 L66.5 73 L73 73 L68 77 L70 83 L64 79 L58 83 L60 77 L55 73 L61.5 73 Z"/>
+                            <path d="M82 62 L84.5 68 L91 68 L86 72 L88 78 L82 74 L76 78 L78 72 L73 68 L79.5 68 Z"/>
+                            <path d="M100 60 L102.5 66 L109 66 L104 70 L106 76 L100 72 L94 76 L96 70 L91 66 L97.5 66 Z"/>
+                            <path d="M118 62 L120.5 68 L127 68 L122 72 L124 78 L118 74 L112 78 L114 72 L109 68 L115.5 68 Z"/>
+                            <path d="M136 67 L138.5 73 L145 73 L140 77 L142 83 L136 79 L130 83 L132 77 L127 73 L133.5 73 Z"/>
+                        </g>
+                        <line x1="40" y1="94" x2="160" y2="94" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="55" y1="126" x2="145" y2="126" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+                        <text x="100" y="120" font-family="'Playfair Display', serif" font-size="36" font-weight="bold" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">ШАУРМА</text>
+                        <text x="100" y="145" font-family="'Playfair Display', serif" font-size="16" font-weight="bold" fill="#D4AF37" text-anchor="middle" letter-spacing="1">ДАЛ ДАЛ</text>
+                        <text x="100" y="165" font-family="'Playfair Display', serif" font-size="16" font-weight="bold" fill="#D4AF37" text-anchor="middle" letter-spacing="1">УШЕЛ</text>
+                    </svg>
+                </a>
+                
+                <nav class="nav">
+                    <a href="#about" class="nav-link">О нас</a>
+                    <a href="#menu" class="nav-link">Меню</a>
+                    <a href="#map" class="nav-link">Карта</a>
+                    <a href="#facts" class="nav-link">Факты</a>
+                </nav>
+
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
+                        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </button>
+
+                    <a href="tel:+79181818090" class="header-phone">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                        <span>+7 (918) 181-80-90</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-grid">
+                    <div class="hero-content">
+                        <div class="hero-badge reveal">
+                            <svg class="icon" viewBox="0 0 24 24" style="width:14px;height:14px;">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 6v6l4 2"/>
+                            </svg>
+                            Ежедневно 10:00–23:00
+                        </div>
+                        <h1 class="reveal reveal-delay-1">
+                            Шаурма, которая<br>не подводит. <span>Тимашевск.</span>
+                        </h1>
+                        <p class="hero-description reveal reveal-delay-2">
+                            Свежие ингредиенты, быстрая подача и нестандартное наполнение, за которым возвращаются. Два адреса в городе, доставка и еда навынос.
+                        </p>
+                        <div class="hero-actions reveal reveal-delay-3">
+                            <a href="#menu" class="btn btn-primary">
+                                Смотреть меню
+                                <svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                            <a href="tel:+79181818090" class="btn btn-outline">
+                                <svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                </svg>
+                                Позвонить
+                            </a>
+                        </div>
+                        <div class="hero-stats reveal reveal-delay-3">
+                            <div>
+                                <span class="stat-number">4.4</span>
+                                <span class="stat-label">Рейтинг</span>
+                            </div>
+                            <div>
+                                <span class="stat-number">11</span>
+                                <span class="stat-label">Видов шаурмы</span>
+                            </div>
+                            <div>
+                                <span class="stat-number">450 ₽</span>
+                                <span class="stat-label">Средний чек</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hero-visual reveal reveal-delay-2">
+                        <div class="hero-fallback">
+                            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="100" cy="100" r="98" fill="currentColor" opacity="0.1"/>
+                                <circle cx="100" cy="100" r="88" fill="none" stroke="currentColor" stroke-width="3" opacity="0.2"/>
+                                <text x="100" y="120" font-family="'Playfair Display', serif" font-size="36" font-weight="bold" fill="currentColor" text-anchor="middle" letter-spacing="1" opacity="0.3">ШАУРМА</text>
+                            </svg>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?q=80&w=1200&auto=format&fit=crop" 
+                             alt="Шаурма Дал Дал Ушёл" 
+                             onerror="this.style.opacity='0'">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURES -->
+        <section id="about">
+            <div class="container">
+                <div class="section-label reveal">Почему нас выбирают</div>
+                <h2 class="section-title reveal reveal-delay-1">Быстро, свежо и без компромиссов</h2>
+                <p class="section-subtitle reveal reveal-delay-2">«Дал Дал Ушёл» — это формат быстрого питания, в котором скорость не означает потерю качества. Готовим из свежих продуктов и следим за тем, чтобы каждый заказ был таким, каким вы его ждёте.</p>
+                <div class="features-grid">
+                    <div class="feature-card reveal">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" class="icon">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                            </svg>
+                        </div>
+                        <h3>Свежие ингредиенты</h3>
+                        <p>Овощи, мясо и соусы готовятся под заказ. Никаких заготовок «на потом».</p>
+                    </div>
+                    <div class="feature-card reveal reveal-delay-1">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" class="icon">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 6v6l4 2"/>
+                            </svg>
+                        </div>
+                        <h3>Быстрая подача</h3>
+                        <p>Среднее время ожидания — 5–10 минут. Успеете перекусить даже в обеденный перерыв.</p>
+                    </div>
+                    <div class="feature-card reveal reveal-delay-2">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" class="icon">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                        <h3>Для гостей и на вынос</h3>
+                        <p>Есть терраса, доставка и еда навынос. Оплата картой, наличными и по QR-коду.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MENU INTERACTIVE -->
+        <section class="menu-section" id="menu">
+            <div class="container">
+                <div class="section-label reveal">Меню</div>
+                <h2 class="section-title reveal reveal-delay-1">Полное меню</h2>
+                <p class="section-subtitle reveal reveal-delay-2">Актуальные позиции и цены. Выберите категорию, чтобы посмотреть ассортимент.</p>
+                
+                <div class="menu-container reveal reveal-delay-3">
+                    <div class="menu-sidebar" id="menu-tabs"></div>
+                    <div class="menu-content">
+                        <div class="menu-grid" id="menu-grid"></div>
+                        <p class="menu-note">Цены являются актуальными на текущий момент. Полный ассортимент уточняйте у оператора.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MAP -->
+        <section class="map-section" id="map">
+            <div class="container">
+                <div class="section-label reveal">Как нас найти</div>
+                <h2 class="section-title reveal reveal-delay-1">Мы на карте Тимашевска</h2>
+                <p class="section-subtitle reveal reveal-delay-2">Два адреса в городе. Работаем ежедневно с 10:00 до 23:00.</p>
+                <div class="map-wrapper reveal reveal-delay-3">
+                    <iframe src="https://yandex.ru/map-widget/v1/?ll=38.935841%2C45.615770&z=16&pt=38.935841,45.615770,pm2rdm&pt=38.933460,45.613904,pm2blm" allowfullscreen></iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- FACTS -->
+        <section id="facts">
+            <div class="container">
+                <div class="section-label reveal">Интересное</div>
+                <h2 class="section-title reveal reveal-delay-1">«Дал Дал Ушёл» в цифрах</h2>
+                <div class="facts-grid">
+                    <div class="fact-card reveal">
+                        <div class="fact-number">11</div>
+                        <div class="fact-text">видов шаурмы — от классической до фирменной с нестандартным наполнением</div>
+                    </div>
+                    <div class="fact-card reveal reveal-delay-1">
+                        <div class="fact-number">2</div>
+                        <div class="fact-text">адреса в Тимашевске: Советский переулок, 16 и Красная улица, 104</div>
+                    </div>
+                    <div class="fact-card reveal reveal-delay-2">
+                        <div class="fact-number">90+</div>
+                        <div class="fact-text">позиций в меню, включая горячие блюда, комбо-наборы, снеки и напитки</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <div class="logo">
+                            <svg class="logo-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="100" cy="100" r="98" fill="#000000"/>
+                                <circle cx="100" cy="100" r="88" fill="none" stroke="#FFFFFF" stroke-width="3"/>
+                                <circle cx="100" cy="100" r="80" fill="none" stroke="#FFFFFF" stroke-width="1.5"/>
+                                <g fill="#D4AF37">
+                                    <path d="M64 67 L66.5 73 L73 73 L68 77 L70 83 L64 79 L58 83 L60 77 L55 73 L61.5 73 Z"/>
+                                    <path d="M82 62 L84.5 68 L91 68 L86 72 L88 78 L82 74 L76 78 L78 72 L73 68 L79.5 68 Z"/>
+                                    <path d="M100 60 L102.5 66 L109 66 L104 70 L106 76 L100 72 L94 76 L96 70 L91 66 L97.5 66 Z"/>
+                                    <path d="M118 62 L120.5 68 L127 68 L122 72 L124 78 L118 74 L112 78 L114 72 L109 68 L115.5 68 Z"/>
+                                    <path d="M136 67 L138.5 73 L145 73 L140 77 L142 83 L136 79 L130 83 L132 77 L127 73 L133.5 73 Z"/>
+                                </g>
+                                <line x1="40" y1="94" x2="160" y2="94" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="55" y1="126" x2="145" y2="126" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+                                <text x="100" y="120" font-family="'Playfair Display', serif" font-size="36" font-weight="bold" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">ШАУРМА</text>
+                                <text x="100" y="145" font-family="'Playfair Display', serif" font-size="16" font-weight="bold" fill="#D4AF37" text-anchor="middle" letter-spacing="1">ДАЛ ДАЛ</text>
+                                <text x="100" y="165" font-family="'Playfair Display', serif" font-size="16" font-weight="bold" fill="#D4AF37" text-anchor="middle" letter-spacing="1">УШЕЛ</text>
+                            </svg>
+                        </div>
+                        <p>Кафе быстрого питания в Тимашевске. Шаурма, бургеры, пита и напитки. Работаем ежедневно с 10:00 до 23:00.</p>
+                    </div>
+                    <div>
+                        <h4>Навигация</h4>
+                        <ul class="footer-links">
+                            <li><a href="#about">О нас</a></li>
+                            <li><a href="#menu">Меню</a></li>
+                            <li><a href="#map">Карта</a></li>
+                            <li><a href="#facts">Факты</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Контакты</h4>
+                        <ul class="footer-links">
+                            <li><a href="tel:+79181818090">+7 (918) 181-80-90</a></li>
+                            <li><a href="#">Советский пер., 16</a></li>
+                            <li><a href="#">Красная ул., 104</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <span>© 2026 «Дал Дал Ушёл». Тимашевск.</span>
+                    <span>Информация не является публичной офертой.</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div class="admin-container container" id="admin-panel">
+        <div class="admin-header">
+            <h2 class="admin-title">Управление меню</h2>
+            <div style="display: flex; gap: 16px;">
+                <button class="btn btn-outline" onclick="window.location.href='/'">На сайт</button>
+                <button class="btn btn-danger" onclick="logout()">Выйти</button>
+            </div>
+        </div>
+
+        <div class="admin-layout">
+            <!-- Sidebar (Categories) -->
+            <div class="admin-sidebar">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h3>Категории</h3>
+                    <button class="admin-icon-btn" onclick="openCategoryModal()" title="Добавить категорию">+</button>
+                </div>
+                <div id="admin-cat-list"></div>
+            </div>
+
+            <!-- Main (Items) -->
+            <div class="admin-main">
+                <div class="admin-main-header">
+                    <h3 id="admin-current-cat-title">Выберите категорию</h3>
+                    <button class="btn btn-primary" id="admin-add-item-btn" onclick="openItemModal()" style="padding: 10px 20px; font-size: 12px;" disabled>Добавить блюдо</button>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Цена</th>
+                            <th>Вес</th>
+                            <th style="width: 100px;">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-items-list">
+                        <!-- Items will be generated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: CATEGORY -->
+    <div class="modal-overlay" id="categoryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="catModalTitle">Новая категория</h3>
+                <button class="modal-close" onclick="closeModal('categoryModal')">&times;</button>
+            </div>
+            <input type="hidden" id="catEditId">
+            <div class="form-group">
+                <label>Название категории</label>
+                <input type="text" id="catName" class="form-control" placeholder="Например: Десерты">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('categoryModal')">Отмена</button>
+                <button class="btn btn-primary" onclick="saveCategory()">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ITEM -->
+    <div class="modal-overlay" id="itemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="itemModalTitle">Новое блюдо</h3>
+                <button class="modal-close" onclick="closeModal('itemModal')">&times;</button>
+            </div>
+            <input type="hidden" id="itemEditId">
+            <div class="form-group">
+                <label>Название блюда</label>
+                <input type="text" id="itemName" class="form-control" placeholder="Например: Шаурма Цезарь">
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="form-group">
+                    <label>Цена (₽)</label>
+                    <input type="number" id="itemPrice" class="form-control" placeholder="250">
+                </div>
+                <div class="form-group">
+                    <label>Вес / Объем</label>
+                    <input type="text" id="itemWeight" class="form-control" placeholder="300 г">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Описание (необязательно)</label>
+                <textarea id="itemDesc" class="form-control" rows="3" placeholder="Сочная курица, свежие овощи..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('itemModal')">Отмена</button>
+                <button class="btn btn-primary" onclick="saveItem()">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DEFAULT DATA ---
+        const defaultMenuData = {
+            "hot-drinks": {
+                title: "Горячие напитки",
+                items: [
+                    { name: "Американо", weight: "300 мл", price: "168 ₽" },
+                    { name: "Американо", weight: "200 мл", price: "132 ₽" },
+                    { name: "Горячий шоколад", weight: "300 мл", price: "204 ₽", desc: "Согревающий горячий напиток, приготовленный из насыщенного шоколадного порошка и воды. Идеальный выбор для любителей шоколада." },
+                    { name: "Капучино", weight: "300 мл", price: "180 ₽" },
+                    { name: "Капучино", weight: "200 мл", price: "168 ₽" },
+                    { name: "Латте", weight: "300 мл", price: "160 ₽" },
+                    { name: "Латте", weight: "200 мл", price: "150 ₽" },
+                    { name: "Флэт уайт", weight: "200 мл", price: "140 ₽" },
+                    { name: "Чай Брусника-имбирь авторский", weight: "300 мл", price: "180 ₽", desc: "Хотите согреться и насладиться ярким вкусом? Закажите горячий напиток Чай Брусника Имбирь! В его составе — ароматная брусника, пряный имбирь, вода и сахар." },
+                    { name: "Чай Облепиха-апельсин авторский", weight: "300 мл", price: "180 ₽", desc: "Хотите согреться и укрепить иммунитет? Попробуйте наш авторский чай из свежей облепихи и апельсина - это восхитительное сочетание пользы и вкуса в категории горячих напитков." },
+                    { name: "Чай зеленый Гринфилд", weight: "300 мл", price: "72 ₽", desc: "Этот напиток обладает приятным, насыщенным вкусом и лёгким, ненавязчивым ароматом. Он хорошо бодрит и придаёт сил. Зелёный чай особенно полезен, поскольку содержит большое количество антиоксидантов." },
+                    { name: "Чай черный Гринфилд", weight: "300 мл", price: "72 ₽", desc: "Согревающий горячий напиток, который подарит вам заряд бодрости и хорошего настроения. Ароматный чёрный чай в сочетании с водой и сахаром — классика, которая всегда будет актуальной." },
+                    { name: "Эспрессо", weight: "100 мл", price: "150 ₽" }
+                ]
+            },
+            "shawarma": {
+                title: "Шаурма",
+                items: [
+                    { name: "Шаурма Ассорти", weight: "780 г", price: "504 ₽", desc: "Сытная и сочная, эта шаурма отличается разнообразием ингредиентов. Здесь и обжаренный картофель, и сочная пекинская капуста, и свежий овощной микс из болгарского перца, помидоров и огурчиков. А ещё – ароматная колбаска гриль, нежная курица и два вида авторского соуса." },
+                    { name: "Шаурма Дал-дал Фирменная", weight: "245 г", price: "359 ₽", desc: "Сочное филе куриное, обжаренные грибы и сыр моцарелла, пекинская капуста, помидор, свежий огурчик и итальянская лепёшка — всё это великолепие подается с авторским соусом. Блюдо щедро украшено зеленью: кинзой, укропом, петрушкой и базиликом." },
+                    { name: "Шаурма Мексика куриная", weight: "425 г", price: "383 ₽", desc: "Сочная куриная шаурма по-мексикански. В составе: лаваш, обжаренное на тепане филе, болгарский перец, лук, помидор, а также авторский соус, соус барбекю, соус шрирача, соус сальса. Особый вкус добавляют перец халапеньо и зелень: кинза, укроп, петрушка." },
+                    { name: "Шаурма Мексика со свининой", weight: "425 г", price: "395 ₽", desc: "Шаурма Мексика со свининой - это сочная и сытная шаурма из категории Шаурма. В её составе приготовленная на мангале свиная шея, болгарский перец, лук, помидор, перец халапеньо и авторский соус, а также соусы барбекю, шрирача и сальса. Блюдо подаётся с картофелем фри." },
+                    { name: "Шаурма вегетарианская", weight: "350 г", price: "312 ₽", desc: "Это сытное блюдо, которое отлично утоляет голод. В нём много овощей и зелени, а также обжаренный картофель и сыр моцарелла. Вкус блюда дополняет фирменный соус." },
+                    { name: "Шаурма овощи гриль", weight: "425 г", price: "359 ₽", desc: "Это сытное блюдо, которое отлично подойдёт для обеда или ужина. Угощение приготовлено из обжаренных на гриле овощей: болгарского перца, грибов, баклажана и кабачка, а также сочных помидоров и лука. Овощную смесь дополняют пряные травы — орегано и смесь итальянских трав." },
+                    { name: "Шаурма по-деревенски", weight: "370 г", price: "335 ₽", desc: "Блюдо представляет собой завёрнутые в лаваш обжаренный картофель, сочный помидор, пряную пекинскую капусту и нежное филе курицы, приготовленное на тепане. Особую пикантность придаёт солёный огурчик, а сметанный авторский соус в сочетании с зеленью кинзы." },
+                    { name: "Шаурма с колбаской", weight: "375 г", price: "359 ₽", desc: "Это сытное блюдо, которое отлично утоляет голод. Сочетание сочной колбаски гриль, приготовленной на мангале, с хрустящим лавашом и свежими овощами никого не оставит равнодушным. Зелень и авторские соусы добавляют блюду пикантности." },
+                    { name: "Шаурма с курицей", weight: "370 г", price: "300 ₽", desc: "Сочное филе красного мяса курицы, приготовленное на тепане, свежие овощи и фирменный соус — всё это подаётся в лаваше, сдобренной ароматной зеленью. Это блюдо подарит чувство сытости и удовольствие от каждого кусочка." },
+                    { name: "Шаурма со свининой", weight: "380 г", price: "347 ₽", desc: "Сочная шаурма со свининой — отличный вариант для сытного перекуса! В составе: лаваш, пекинская капуста, помидор, свежий и солёный огурцы, ароматная свинина, приготовленная на мангале, а также авторский соус и соус барбекю." }
+                ]
+            },
+            "burgers": {
+                title: "Бургеры",
+                items: [
+                    { name: "Биф бургер", weight: "370 г", price: "540 ₽", desc: "Биф бургер – это классика категории Бургеры. Сочная говяжья котлета, свежие овощи, пикантные солёные огурчики, соусы барбекю и гриль - и всё это на мягкой булочке бриошь." },
+                    { name: "Бургер гриль говядина", weight: "475 г", price: "564 ₽", desc: "Бургер «Гриль говядина» — сочный бургер с котлетой из говядины, моцареллой и беконом, дополненный жареными овощами: луком, кабачком, баклажаном и болгарским перцем. Всё это в булке с кунжутом и с соусом, который придаёт блюду неповторимый вкус." },
+                    { name: "Бургер гриль свинина", weight: "455 г", price: "480 ₽", desc: "Этот бургер относится к категории блюд, которые стоит попробовать. Сочная котлета (курица-свинина), бекон, моцарелла, а также кабачок, баклажан и перец, приготовленные на гриле, и свежие листья салата — всё это подается на булочке с кунжутом. А оригинальный соус делает вкус еще более насыщенным." },
+                    { name: "Карибский бургер", weight: "380 г", price: "540 ₽", desc: "Сочная говяжья котлета, бекон, обжаренный до золотистой корочки, и сладкий жареный ананас — всё это подается на мягкой булочке бриошь. Пикантность и остроту добавляют горчичный соус и жареный лук, а соус гриль объединяет все ингредиенты, создавая гармоничный вкус." },
+                    { name: "Классик", weight: "375 г", price: "372 ₽", desc: "Бургеры — это всегда беспроигрышный вариант для сытного обеда. Сочная котлета (курица свинина), мягкая моцарелла, свежий салат и помидор, хрустящий лук и солёный огурчик, и всё это на кунжутной булке. А наши авторские соусы сделают вкус ещё более насыщенным." },
+                    { name: "С колбаской гриль", weight: "355 г", price: "504 ₽", desc: "Бургер С колбаской гриль - это классика в авторской интерпретации. Сочная колбаска гриль, свежие овощи и фирменный соус на мягкой булочке с кунжутом. Попробуйте один раз и захотите ещё!" },
+                    { name: "Чизбургер", weight: "240 г", price: "239 ₽", desc: "Сочная котлета из куриного мяса с добавлением свинины, обжаренная до румяной корочки, моцарелла, которая аппетитно тянется, и два вида соуса — всё это подаётся на мягкой булочке с кунжутом. Дополняет вкус небольшой солёный огурчик. Это отличный выбор для быстрого перекуса." },
+                    { name: "Чикен чиз бургер", weight: "355 г", price: "420 ₽", desc: "Этот бургер - настоящий кулинарный шедевр. Сочный вкус нежного куриного филе в кляре в сочетании с авторской сырной котлетой, свежесть овощей и пряность лука, оригинальность авторских соусов и всё это на мягкой булочке с кунжутом - попробовав раз, вы вернетесь снова." },
+                    { name: "Чикенбургер", weight: "305 г", price: "342 ₽", desc: "Бургеры — это всегда отличная идея. Этот бургер — не исключение. Сочная курица в кляре в сочетании с сыром, свежими овощами и фирменным соусом не оставят вас равнодушными." }
+                ]
+            },
+            "extras": {
+                title: "Дополнительно",
+                items: [
+                    { name: "Бекон", weight: "30 г", price: "60 ₽", desc: "Ищете способ сделать блюдо ещё более сытным и аппетитным? Бекон – идеальное дополнение к вашему заказу! Попробуйте его в качестве ингредиента." },
+                    { name: "Грибы", weight: "40 г", price: "60 ₽", desc: "Ищете идеальный ингредиент, чтобы дополнить основное блюдо? Обратите внимание на наши свежие шампиньоны! Они станут отличным дополнением к вашему обеду или ужину." },
+                    { name: "Котлета свино-куриная", weight: "100 г", price: "144 ₽", desc: "Ищете что-то сытное и сочное для вашего идеального блюда? Предлагаем попробовать наше дополнение - сочетание свинины и курицы. Богатый и гармоничный вкус." },
+                    { name: "Курица", weight: "100 г", price: "156 ₽", desc: "Нежное мясо, которое тает во рту. Пряности подчёркивают его вкус, но не перебивают его. С курицей сочетаются разные соусы и гарниры. Добавьте курочку шаурму, питу и другие блюда нашего меню." },
+                    { name: "Лепешка", weight: "50 г", price: "60 ₽", desc: "Если вы хотите добавить изюминку к вашему заказу, обратите внимание на раздел Дополнительно. Здесь вы найдёте лепёшку, которая станет отличным дополнением к основным блюдам." },
+                    { name: "Сыр", weight: "40 г", price: "60 ₽", desc: "Сыр моцарелла — идеальное дополнение к вашему заказу. Попробуйте его в составе пиццы или в сочетании с другими блюдами." },
+                    { name: "Халапеньо", weight: "10 г", price: "36 ₽", desc: "Добавьте остроты в ваш заказ. Попробуйте перец халапеньо в качестве дополнительной закуски." },
+                    { name: "Шашлык куриный", weight: "100 г", price: "216 ₽", desc: "Дополнительно к основному заказу можно взять нежный куриный шашлык. Сочное мясо, ароматный перец и пряный соус — это яркое сочетание вкусов и текстур, которое приятно удивит гостей." },
+                    { name: "Шашлык свиной", weight: "100 г", price: "204 ₽", desc: "Сочный, нежный, ароматный – приготовленный на огне, он обладает ярким вкусом, который подчёркивает натуральная мягкость мяса. Блюдо отлично сочетается с различными гарнирами и овощами. Подаётся с соусами." }
+                ]
+            },
+            "combo": {
+                title: "Комбо",
+                items: [
+                    { name: "Стритбокс с колбаской гриль", weight: "300 г", price: "371 ₽", desc: "Ищете сытный и вкусный обед? Тогда вам стоит попробовать наш стритбокс! Сочная колбаска гриль, хрустящий картофель фри и ароматный соус барбекю – идеальное сочетание для тех, кто ценит вкусную еду." },
+                    { name: "Стритбокс с крылышками барбекю", weight: "330 г", price: "359 ₽", desc: "Согревающий соус барбекю, хрустящий картофель фри и нежные крылышки барбекю с пикантным вкусом — отличный выбор для сытного обеда или ужина." },
+                    { name: "Стритбокс с крылышками темпура", weight: "380 г", price: "359 ₽", desc: "Хрустящие крылья в темпуре и картофель фри с соусом барбекю — это беспроигрышное сочетание, которое придётся по вкусу всем любителям простых и понятных блюд. Сочные крылья и поджаристый картофель с золотистой корочкой станут отличным вариантом для обеда." },
+                    { name: "Стритбокс с наггетсами", weight: "240 г", price: "335 ₽", desc: "Это сытное комбо подойдёт для обеда или ужина. Хрустящие наггетсы в сочетании с картофелем фри и соусом барбекю создают богатый и насыщенный вкус. Соус барбекю придаёт пикантность и идеально дополняет сочные наггетсы и хрустящий картофель." },
+                    { name: "Стритбокс со стрипсами", weight: "280 г", price: "384 ₽", desc: "Стритбокс со стрипсами – это сытный перекус из категории Комбо. В него входят куриные стрипсы собственного производства и картофель фри, а соус барбекю добавляет блюду пикантности." },
+                    { name: "Фри бокс с беконом", weight: "200 г", price: "252 ₽", desc: "Ищете сытный и вкусный обед? Тогда вам стоит попробовать комбо из категории Фри бокс. Хрустящий жареный бекон, ароматный лук и нежный картофель фри с горчичным соусом – это сочетание, которое никого не оставит равнодушным." },
+                    { name: "Фри бокс с грибами", weight: "240 г", price: "264 ₽", desc: "Фри бокс - это комбо из золотистых ломтиков картофеля фри, ароматных жареных шампиньонов и лука. Вкус блюда дополняет горчичный соус." },
+                    { name: "Фри бокс с колбаской гриль", weight: "220 г", price: "276 ₽", desc: "Фри бокс с колбаской гриль — это комбо из нежной колбаски гриль, хрустящего картофеля фри, золотистого жареного лука и соуса барбекю. Насладитесь сочным вкусом и сытным обедом или ужином!" }
+                ]
+            },
+            "pitas": {
+                title: "Питы",
+                items: [
+                    { name: "Пита Дал-дал с колбаской", weight: "365 г", price: "346 ₽", desc: "Пита Дал-дал с колбаской — это сытное блюдо в тортилье из категории Питы. В составе ароматная колбаска гриль, пекинская капуста, помидоры, лук, зелень и картофель фри, а также авторский сметанный соус, соус барбекю и розовый соус." },
+                    { name: "Пита Дал-дал с куриным шашлыком", weight: "355 г", price: "359 ₽", desc: "Пита Дал-дал с куриным шашлыком — это сытное и вкусное блюдо из нашей категории питы. Сочная пекинская капуста, помидоры и куриный шашлык в сочетании с обжаренным болгарским перчиком и луком, а также ароматный соус барбекю и нежный сметанный соус, завернутые в тортилью." },
+                    { name: "Пита Дал-дал с курицей", weight: "340 г", price: "299 ₽", desc: "Пита Дал-дал с курицей — это сытное и вкусное блюдо. Сочетание нежной пекинской капусты, сочного помидора и обжаренного куриного филе, приправленное авторским сметанным и розовым соусами, не оставит вас равнодушными. А картофель фри добавит блюду хрустящую нотку." },
+                    { name: "Пита Дал-дал с шашлыком", weight: "355 г", price: "335 ₽", desc: "Пита Дал-дал с шашлыком – сытный и вкусный вариант для обеда или ужина. Сочная свиная шея, авторский сметанный и розовый соус, пекинская капуста, помидоры, лук и зелень в сочетании с основой из тортильи – всё, что нужно для настоящего гастрономического удовольствия." },
+                    { name: "Пита с колбаской", weight: "385 г", price: "346 ₽", desc: "Пита с колбаской — это сытное и вкусное блюдо из греческой питы с колбаской гриль, пекинской капустой, помидором, луком и зеленью, а также с авторскими сметанным и розовым соусами. Подаётся с картофелем фри. Попробуйте наш вариант популярного стритфуда." },
+                    { name: "Пита с куриным шашлыком", weight: "360 г", price: "359 ₽", desc: "Пита с куриным шашлыком — это сытный перекус из греческой питы, нежного куриного шашлыка, свежих помидоров и пекинской капусты. Уникальный вкус блюду придают авторские сметанный и розовый соусы. Подаётся с картофелем фри." },
+                    { name: "Пита с курицей", weight: "395 г", price: "299 ₽", desc: "Пита с сочной начинкой из курицы и овощей. Сметанный и розовый соусы придают блюду нежность и пикантность, а пекинская капуста и зелень добавляют свежести. Подаётся с картофелем фри." },
+                    { name: "Пита с шашлыком", weight: "395 г", price: "335 ₽", desc: "Пита с сочной начинкой из мяса и овощей - отличный вариант для сытного обеда или ужина. Сочетание нежного свиного шашлыка с соусами, свежими овощами и хрустящим картофелем создаёт богатый вкус." }
+                ]
+            },
+            "rolls": {
+                title: "Роллы",
+                items: [
+                    { name: "Биф-ролл", weight: "290 г", price: "335 ₽", desc: "Биф-ролл – это сытное и вкусное блюдо из категории Роллы. Сочная свино-куриная котлета, обжаренная с соусом барбекю, вместе со свежим болгарским перцем, помидором и капустой, хрустящим огурчиком и луком заворачивается в тортилью. Идеальный выбор для сытного перекуса." },
+                    { name: "Биф-ролл говядина", weight: "320 г", price: "384 ₽", desc: "Попробуйте аппетитный ролл с сочной говяжьей котлетой, закутанной в тортилью, вместе с овощами и ароматными соусами гриль и барбекю - идеальное сочетание вкусов." },
+                    { name: "Гавайский ролл", weight: "290 г", price: "311 ₽", desc: "Гавайский ролл - это сочная начинка из курицы, ароматного лука, сладкого ананаса и нежной пекинской капусты, которая спрятана в лепёшку тортилью. Попробуйте Гавайский ролл из категории Роллы и насладитесь каждым кусочком." },
+                    { name: "Итальянский ролл", weight: "290 г", price: "360 ₽", desc: "Этот ролл сочетает в себе средиземноморские вкусы и ароматы. Он приготовлен из пшеничной тортильи, в которую завёрнуты обжаренная курица, ломтики помидора и болгарского перца, а также пикантная салями. Особенный вкус роллу придаёт авторский розовый соус." },
+                    { name: "Ролл с колбаской", weight: "350 г", price: "389 ₽", desc: "Этот ролл сочетает в себе аппетитную обжаренную колбаску и свежие овощи. Ароматный болгарский перец, сочный помидор и пикантный солёный огурчик вместе с пряной зеленью и нежной пекинской капустой заворачиваются в пшеничную тортилью. Особую изюминку добавляет чесночный соус." },
+                    { name: "Ролл с крабом", weight: "265 г", price: "371 ₽", desc: "Этот ролл сочетает в себе нежность краба и аппетитность овощей. Он подаётся в лепёшке с соусом цезарь и сыром моцарелла. Свежий и сочный, ролл порадует вас богатством вкусов." },
+                    { name: "Цезарь-ролл", weight: "285 г", price: "250 ₽", desc: "Если вы любите аппетитные сочетания овощей и мяса, вам понравится этот ролл. Сочные помидоры и нежная пекинская капуста, ароматный болгарский перец, хрустящие наггетсы, соус цезарь и сыр пармезан – попробуйте, это очень вкусно!" },
+                    { name: "Чиз ролл", weight: "285 г", price: "250 ₽", desc: "Чиз ролл – это сочное блюдо из категории Роллы. В его составе нежная пекинская капуста, ароматный болгарский перец, помидоры, сыр моцарелла и сырные палочки. Вкус ингредиентов подчёркивает авторский гавайский соус." }
+                ]
+            },
+            "portions": {
+                title: "Порции",
+                items: [
+                    { name: "Порция ассорти", weight: "650 г", price: "671 ₽", desc: "Категория: порции. Сочная колбаска, ароматная свинина, питательная курино-свиная котлета, а также аппетитные овощи и два авторских соуса — всё это собрано в одной порции, чтобы вы могли насладиться разнообразием вкусов и текстур." },
+                    { name: "Порция с колбасками", weight: "580 г", price: "599 ₽", desc: "Это сбалансированный и сытный обед. Он включает в себя горячую румяную картошку фри, мягкую питу и пикантную колбаску гриль. В составе также есть свежие и солёные огурцы, помидор и острый перец халапеньо. Блюдо дополнено двумя авторскими соусами и ароматными специями." },
+                    { name: "Порция с крылышками", weight: "560 г", price: "552 ₽", desc: "Ищете сытное и вкусное блюдо? Тогда вам стоит попробовать эту порцию! Хрустящие куриные крылышки, пикантные соусы, ароматные свежие и солёные огурчики, картофель фри, лук, орегано и нежная греческая пита — всё это станет отличным выбором для обеда или ужина." },
+                    { name: "Порция с куриным шашлыком", weight: "560 г", price: "587 ₽", desc: "Ищете сытный обед? Предлагаем попробовать порцию с нежным куриным шашлыком, приготовленным на мангале. В составе также греческая пита, картофель фри, свежие и солёные огурцы, перец халапеньо, лук, орегано и два авторских соуса." },
+                    { name: "Порция с курицей", weight: "480 г", price: "527 ₽", desc: "Порция с курицей – это сытный и вкусный обед из категории Порции. В составе вас ждут: пита греческая, картофель фри, свежие и солёные огурчики, помидор, перец халапеньо, обжаренное на теппане филе курицы, лук, орегано и два авторских соуса." },
+                    { name: "Порция с курицей в беконе", weight: "645 г", price: "696 ₽", desc: "Ищете сытное и вкусное блюдо? Тогда вам стоит попробовать Порцию с курицей в беконе из категории Порции. Сочная курица, хрустящий бекон, ароматные авторские соусы и свежие овощи — идеальный выбор для обеда или ужина." },
+                    { name: "Порция с шашлыком", weight: "560 г", price: "599 ₽", desc: "Это сытное блюдо, которое отлично утоляет голод. Оно представляет собой порцию шашлыка из свиной шеи с картофелем фри, овощами и двумя авторскими соусами. Подаётся с греческой питой. Овощи и соусы добавляют разнообразие вкусов и текстур, делая блюдо невероятно вкусным." }
+                ]
+            },
+            "snacks": {
+                title: "Снеки",
+                items: [
+                    { name: "Картофель фри", weight: "120 г", price: "204 ₽", desc: "Ищете, чем утолить голод? В разделе снеков вас ждёт король закусок — ароматный, с хрустящей корочкой и мягкий внутри. Золотистые ломтики картофеля, обжаренные до совершенства, станут идеальным дополнением к любому блюду или основой сытного перекуса." },
+                    { name: "Краб темпура", weight: "200 г", price: "359 ₽", desc: "Ищете лёгкий и вкусный снек? Попробуйте краб в темпуре – это идеальный баланс нежности мяса и хруста корочки, который порадует ваши вкусовые рецепторы." },
+                    { name: "Крылья барбекю", weight: "120 г", price: "264 ₽", desc: "Ищете, чем удивить свои рецепторы? Для вас есть кое-что интересное – пикантное сочетание сочных крылышек с остро-сладкими соусами барбекю и шрирача." },
+                    { name: "Крылья темпура", weight: "120 г", price: "264 ₽", desc: "Крылья – идеальный снек для большой компании. Сочные жареные крылышки подойдут для встречи с друзьями или семейного вечера." },
+                    { name: "Луковые кольца", weight: "120 г", price: "192 ₽", desc: "Хрустящие и ароматные колечки, приготовленные из свежего лука. Они отлично подойдут в качестве закуски и станут прекрасным дополнением к различным соусам и дипам. Подаются горячими." },
+                    { name: "Наггетсы", weight: "100 г", price: "240 ₽", desc: "Наггетсы – отличный выбор для любителей сочных снеков. Нежные кусочки куриного филе, обжаренные до золотистой корочки, станут идеальным перекусом." },
+                    { name: "Сырные палочки", weight: "120 г", price: "299 ₽", desc: "Попробуйте наши хрустящие снеки — лёгкие и достаточно сытные, чтобы утолить голод. В составе только отборный сыр моцарелла." }
+                ]
+            },
+            "sauces": {
+                title: "Соусы",
+                items: [
+                    { name: "Кетчуп", weight: "25 г", price: "54 ₽", desc: "Соусы – это палитра, которая может украсить любое блюдо. Этот соус, изготовленный из спелых томатов, добавит яркие акценты к мясу, пасте или гарниру." },
+                    { name: "Соус Барбекю", weight: "25 г", price: "54 ₽", desc: "Соус Барбекю – идеальное дополнение к мясным блюдам. Этот классический соус для барбекю порадует вас богатым вкусом и ароматом." },
+                    { name: "Соус Кисло-сладкий", weight: "25 г", price: "54 ₽", desc: "Этот соус добавит изюминку вашему блюду! Он сочетает в себе кисло-сладкие нотки, которые приятно удивят вас и сделают вкус блюда насыщенным и неповторимым. Идеально подходит к мясным и рыбным блюдам." },
+                    { name: "Соус Розовый", weight: "25 г", price: "54 ₽", desc: "Соус обладает сложным и многогранным вкусом. В нём чувствуется приятная кислинка, которая уравновешивается сладкими нотами. В каждом кусочке ощущается бархатистая текстура. Соус прекрасно сочетается с различными блюдами и добавляет им изысканности. Рекомендуется к мясным блюдам." },
+                    { name: "Соус Сальса", weight: "25 г", price: "60 ₽", desc: "Острый и свежий, этот соус добавит пикантности любому блюду. Он прекрасно сочетается с чипсами, мясом и рыбой. Соус имеет насыщенный вкус и аромат, который не оставит равнодушными любителей острых ощущений. Сальса — идеальный выбор для тех, кто хочет добавить ярких красок." },
+                    { name: "Соус Сметанный", weight: "25 г", price: "54 ₽", desc: "Хотите попробовать что-то новое? Тогда вам стоит обратить внимание на категорию соусов в нашем меню. Сочетание авторской рецептуры и нежной сметаны не оставят вас равнодушными." },
+                    { name: "Соус Сырный", weight: "25 г", price: "54 ₽", desc: "Соус сырный – идеальный выбор для любителей сыра. Этот соус станет прекрасным дополнением к любому блюду. Рекомендуется подавать с картофелем, мясом или как дип для закусок." }
+                ]
+            },
+            "cold-drinks": {
+                title: "Холодные напитки",
+                items: [
+                    { name: "Кола", weight: "500 мл", price: "120 ₽" },
+                    { name: "Кола", weight: "400 мл", price: "108 ₽" },
+                    { name: "Кола", weight: "300 мл", price: "96 ₽" },
+                    { name: "Милкшейк Классик", weight: "400 мл", price: "240 ₽", desc: "Милкшейк Классик - это идеальное сочетание молока и мороженого, которое подарит вам незабываемое наслаждение. Порадуйте себя холодным напитком в жаркий день." }
+                ]
+            },
+            "burritos": {
+                title: "Буррито",
+                items: [
+                    { name: "Буррито с говядиной", weight: "355 г", price: "420 ₽", desc: "Тёплая тортилья с начинкой из сочного говяжьего фарша, дополненная пикантным перцем халапеньо и сладковатой кукурузой. Фасоль и пекинская капуста придают блюду свежесть, а сыр моцарелла добавляет сливочность." },
+                    { name: "Буррито с курицей", weight: "335 г", price: "347 ₽", desc: "Это сытное блюдо с богатым вкусом. Оно состоит из тортильи с сочной начинкой из нежного куриного филе, пикантной кукурузы и фасоли. В начинке также используется пекинская капуста, которая добавляет блюду свежести. Особый вкус и остроту блюду придаёт перец халапеньо." },
+                    { name: "Буррито со свининой", weight: "375 г", price: "359 ₽", desc: "Это сытное блюдо, которое отлично утоляет голод. Тёплая пшеничная лепёшка с начинкой из сочной свинины, обжаренной на мангале, и свежих овощей. Сладкие зёрна кукурузы и пряная фасоль гармонично сочетаются с перцем халапеньо, а расплавленный сыр объединяет все ингредиенты." }
+                ]
+            },
+            "salads": {
+                title: "Салаты",
+                items: [
+                    { name: "Салат Греческий", weight: "265 г", price: "324 ₽", desc: "Лёгкий и освежающий салат из свежих овощей. Помидоры, огурцы, болгарский перец и лук нарезаны крупными кусочками, что придаёт блюду текстуру и объём. Завершает композицию мягкий сыр фета, добавляющий нежный сливочный вкус. Заправка из оливкового масла." },
+                    { name: "Салат Цезарь с курицей", weight: "290 г", price: "336 ₽", desc: "Попробуйте наш салат Цезарь с курицей из категории Салаты. Нежный вкус салата айсберг и сочного помидора, аппетитные стрипсы, ароматный авторский соус цезарь и сыр пармезан — попробуйте это гармоничное сочетание!" },
+                    { name: "Салат овощной", weight: "220 г", price: "240 ₽", desc: "Ищете лёгкий и полезный салат? Попробуйте наш салат овощной! В его состав входят свежие и сочные ингредиенты: помидор, огурчик, болгарский перец и лук." }
+                ]
+            }
+        };
+
+        // --- APP STATE & INIT ---
+        let currentMenuData = JSON.parse(localStorage.getItem('dd_menuData')) || defaultMenuData;
+        let isAdminPath = window.location.pathname.endsWith('/admin') || window.location.pathname.endsWith('/admin/') || window.location.hash === '#admin';
+        
+        // --- THEME TOGGLE ---
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                if (htmlElement.getAttribute('data-theme') === 'light') {
+                    htmlElement.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    htmlElement.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+        }
+
+        // --- MAIN SITE LOGIC ---
+        const tabsContainer = document.getElementById('menu-tabs');
+        const gridContainer = document.getElementById('menu-grid');
+        let activeCategory = Object.keys(currentMenuData)[0];
+
+        function renderMainTabs() {
+            if (!tabsContainer) return;
+            tabsContainer.innerHTML = '';
+            Object.keys(currentMenuData).forEach(key => {
+                const btn = document.createElement('button');
+                btn.className = `menu-tab ${key === activeCategory ? 'active' : ''}`;
+                btn.textContent = currentMenuData[key].title;
+                btn.onclick = () => switchMainCategory(key);
+                tabsContainer.appendChild(btn);
+            });
+        }
+
+        function renderMainItems(categoryKey) {
+            if (!gridContainer) return;
+            const items = currentMenuData[categoryKey].items || [];
+            gridContainer.innerHTML = '';
+            
+            items.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'menu-item';
+                el.innerHTML = `
+                    <div>
+                        <div class="menu-item-header">
+                            <span class="menu-item-name">${item.name}</span>
+                            <span class="menu-item-price">${item.price}</span>
+                        </div>
+                        ${item.weight ? `<span class="menu-item-weight">${item.weight}</span>` : ''}
+                        ${item.desc ? `<p class="menu-item-desc">${item.desc}</p>` : ''}
+                    </div>
+                `;
+                gridContainer.appendChild(el);
+            });
+        }
+
+        function switchMainCategory(key) {
+            if (key === activeCategory) return;
+            if (!gridContainer) return;
+            gridContainer.classList.add('fade-out');
+            setTimeout(() => {
+                activeCategory = key;
+                renderMainTabs();
+                renderMainItems(key);
+                gridContainer.classList.remove('fade-out');
+            }, 300);
+        }
+
+        // --- ROUTING ---
+        function initApp() {
+            if (isAdminPath) {
+                document.getElementById('main-site').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                checkAuth();
+            } else {
+                renderMainTabs();
+                renderMainItems(activeCategory);
+                initScrollAnimations();
+            }
+        }
+
+        // --- SCROLL ANIMATIONS ---
+        function initScrollAnimations() {
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if(header) header.style.boxShadow = window.scrollY > 20 ? '0 4px 20px rgba(0,0,0,0.3)' : 'none';
+            });
+
+            const reveals = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+            reveals.forEach(el => observer.observe(el));
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href === '#') return;
+                    const target = document.querySelector(href);
+                    if (target) {
+                        e.preventDefault();
+                        const top = target.getBoundingClientRect().top + window.pageYOffset - 80;
+                        window.scrollTo({ top, behavior: 'smooth' });
+                    }
+                });
+            });
+        }
+
+        // --- ADMIN AUTH LOGIC ---
+        let isAuthenticated = false;
+
+        function checkAuth() {
+            const savedPass = localStorage.getItem('dd_adminPass');
+            const authScreen = document.getElementById('authScreen');
+            const authTitle = document.getElementById('authTitle');
+            const authDesc = document.getElementById('authDesc');
+            const authForm = document.getElementById('authForm');
+            const authError = document.getElementById('authError');
+
+            if (isAuthenticated) {
+                authScreen.style.display = 'none';
+                renderAdmin();
+                return;
+            }
+
+            authScreen.style.display = 'flex';
+
+            if (!savedPass) {
+                authTitle.textContent = "Первый вход";
+                authDesc.textContent = "Придумайте пароль для доступа к админ-панели";
+            } else {
+                authTitle.textContent = "Вход в админ-панель";
+                authDesc.textContent = "Введите пароль для доступа";
+            }
+
+            authForm.onsubmit = (e) => {
+                e.preventDefault();
+                const inputPass = document.getElementById('adminPassword').value;
+                
+                if (!savedPass) {
+                    // First time setup
+                    localStorage.setItem('dd_adminPass', inputPass);
+                    isAuthenticated = true;
+                    authError.style.display = 'none';
+                    checkAuth();
+                } else {
+                    // Login
+                    if (inputPass === savedPass) {
+                        isAuthenticated = true;
+                        authError.style.display = 'none';
+                        checkAuth();
+                    } else {
+                        authError.style.display = 'block';
+                    }
+                }
+            };
+        }
+
+        function logout() {
+            isAuthenticated = false;
+            document.getElementById('adminPassword').value = '';
+            checkAuth();
+        }
+
+        // --- ADMIN CRUD LOGIC ---
+        let adminActiveCat = Object.keys(currentMenuData)[0];
+
+        function renderAdmin() {
+            renderAdminCategories();
+            if (adminActiveCat && currentMenuData[adminActiveCat]) {
+                selectAdminCategory(adminActiveCat);
+            } else {
+                document.getElementById('admin-current-cat-title').textContent = "Выберите категорию";
+                document.getElementById('admin-items-list').innerHTML = '';
+                document.getElementById('admin-add-item-btn').disabled = true;
+            }
+        }
+
+        function renderAdminCategories() {
+            const list = document.getElementById('admin-cat-list');
+            list.innerHTML = '';
+            
+            Object.keys(currentMenuData).forEach(key => {
+                const item = currentMenuData[key];
+                const btn = document.createElement('div');
+                btn.className = `admin-cat-btn ${key === adminActiveCat ? 'active' : ''}`;
+                btn.innerHTML = `
+                    <span>${item.title}</span>
+                    <div class="admin-actions">
+                        <button class="admin-icon-btn" onclick="event.stopPropagation(); openCategoryModal('${key}')" title="Редактировать">✎</button>
+                        <button class="admin-icon-btn delete" onclick="event.stopPropagation(); deleteCategory('${key}')" title="Удалить">×</button>
+                    </div>
+                `;
+                btn.onclick = () => selectAdminCategory(key);
+                list.appendChild(btn);
+            });
+        }
+
+        function selectAdminCategory(key) {
+            adminActiveCat = key;
+            renderAdminCategories();
+            document.getElementById('admin-current-cat-title').textContent = currentMenuData[key].title;
+            document.getElementById('admin-add-item-btn').disabled = false;
+            
+            const tbody = document.getElementById('admin-items-list');
+            tbody.innerHTML = '';
+            
+            const items = currentMenuData[key].items || [];
+            if (items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Нет блюд в этой категории</td></tr>';
+            } else {
+                items.forEach((item, index) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><strong>${item.name}</strong><br><small style="color:var(--text-muted)">${item.desc ? item.desc.substring(0, 30) + '...' : ''}</small></td>
+                        <td>${item.price}</td>
+                        <td>${item.weight || '-'}</td>
+                        <td>
+                            <div class="admin-actions">
+                                <button class="admin-icon-btn" onclick="openItemModal(${index})" title="Редактировать">✎</button>
+                                <button class="admin-icon-btn delete" onclick="deleteItem(${index})" title="Удалить">×</button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+        }
+
+        // Category Modals
+        function openCategoryModal(editKey = null) {
+            const modal = document.getElementById('categoryModal');
+            const title = document.getElementById('catModalTitle');
+            const input = document.getElementById('catName');
+            const editId = document.getElementById('catEditId');
+
+            if (editKey) {
+                title.textContent = "Редактировать категорию";
+                input.value = currentMenuData[editKey].title;
+                editId.value = editKey;
+            } else {
+                title.textContent = "Новая категория";
+                input.value = '';
+                editId.value = '';
+            }
+            modal.classList.add('active');
+            input.focus();
+        }
+
+        function saveCategory() {
+            const name = document.getElementById('catName').value.trim();
+            const editId = document.getElementById('catEditId').value;
+
+            if (!name) return alert('Введите название');
+
+            if (editId) {
+                currentMenuData[editId].title = name;
+            } else {
+                const newKey = 'cat_' + Date.now();
+                currentMenuData[newKey] = { title: name, items: [] };
+                adminActiveCat = newKey;
+            }
+            
+            saveData();
+            closeModal('categoryModal');
+            renderAdmin();
+        }
+
+        function deleteCategory(key) {
+            if (confirm('Удалить категорию и все её блюда?')) {
+                delete currentMenuData[key];
+                if (adminActiveCat === key) adminActiveCat = Object.keys(currentMenuData)[0];
+                saveData();
+                renderAdmin();
+            }
+        }
+
+        // Item Modals
+        function openItemModal(editIndex = null) {
+            if (!adminActiveCat) return;
+            
+            const modal = document.getElementById('itemModal');
+            const title = document.getElementById('itemModalTitle');
+            const nameInp = document.getElementById('itemName');
+            const priceInp = document.getElementById('itemPrice');
+            const weightInp = document.getElementById('itemWeight');
+            const descInp = document.getElementById('itemDesc');
+            const editId = document.getElementById('itemEditId');
+
+            if (editIndex !== null) {
+                title.textContent = "Редактировать блюдо";
+                const item = currentMenuData[adminActiveCat].items[editIndex];
+                nameInp.value = item.name;
+                priceInp.value = item.price.replace(' ₽', '');
+                weightInp.value = item.weight || '';
+                descInp.value = item.desc || '';
+                editId.value = editIndex;
+            } else {
+                title.textContent = "Новое блюдо";
+                nameInp.value = '';
+                priceInp.value = '';
+                weightInp.value = '';
+                descInp.value = '';
+                editId.value = '';
+            }
+            modal.classList.add('active');
+            nameInp.focus();
+        }
+
+        function saveItem() {
+            const name = document.getElementById('itemName').value.trim();
+            const price = document.getElementById('itemPrice').value.trim();
+            const weight = document.getElementById('itemWeight').value.trim();
+            const desc = document.getElementById('itemDesc').value.trim();
+            const editId = document.getElementById('itemEditId').value;
+
+            if (!name || !price) return alert('Заполните название и цену');
+
+            const itemData = {
+                name: name,
+                price: price + ' ₽',
+                weight: weight,
+                desc: desc
+            };
+
+            if (editId !== '') {
+                currentMenuData[adminActiveCat].items[editId] = itemData;
+            } else {
+                currentMenuData[adminActiveCat].items.push(itemData);
+            }
+
+            saveData();
+            closeModal('itemModal');
+            selectAdminCategory(adminActiveCat);
+        }
+
+        function deleteItem(index) {
+            if (confirm('Удалить это блюдо?')) {
+                currentMenuData[adminActiveCat].items.splice(index, 1);
+                saveData();
+                selectAdminCategory(adminActiveCat);
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('dd_menuData', JSON.stringify(currentMenuData));
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // --- START ---
+        initApp();
+    </script>
+</body>
+</html>
